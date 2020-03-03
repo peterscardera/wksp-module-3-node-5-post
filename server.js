@@ -3,6 +3,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const { homePage, addTaskHandler,inventoryHandler, confirmedHandler } = require("./handlers")
+
 
 const PORT = process.env.PORT || 8000;
 
@@ -18,8 +20,17 @@ express()
     .use(bodyParser.json())
     .use(express.urlencoded({extended: false}))
     .set('view engine', 'ejs')
+    
+
+
 
     // endpoints
+    //-----------TODO----------
+    .get("/todos", homePage)
+    .post("/data", addTaskHandler)
+    //-----------ORDER FORM -------------
+    .post("/order", inventoryHandler)
+    .get("/order-confirmed", confirmedHandler)
 
     .get('*', (req, res) => res.send('Dang. 404.'))
     .listen(PORT, () => console.log(`Listening on port ${PORT}`));

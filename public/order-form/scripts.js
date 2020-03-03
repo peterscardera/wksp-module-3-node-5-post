@@ -24,6 +24,7 @@ const province = document.getElementById('province');
 const postcode = document.getElementById('postcode');
 const country = document.getElementById('country');
 
+
 const updateForm = () => {
     const sel = document.getElementById('order').value;
     if (sel === 'shirt') {
@@ -38,25 +39,27 @@ const handleToggleErrorMessage = (errorStatus) => {
 
 }
 
-const handleSubmit = (event) => {
+const handleSubmit = (event) => { // onsubmit on html
     event.preventDefault();
 
     submitButton.disabled = true;
 
-    const data = {
+    const size = document.getElementById('size');
+    
+    const data = { //taken from the document.getE.id 
         order: order.value,
         size: size.value,
         givenName: givenName.value,
         surname: surname.value,
-        email: email,
+        email: email.value,
         address: address.value,
         city: city.value,
         province: province.value,
         postcode: postcode.value,
-        country: country.value
+        country: country.value,
     };
 
-    fetch(`${serverUrl}/order`, {
+    fetch("/order", {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -66,10 +69,12 @@ const handleSubmit = (event) => {
     })
     .then(res => res.json())
     .then(data => {
-        const { status, error } = data;
+
+        console.log(data)
+        const { status:status, error:error } = data;
         if (status === 'success') {
-            window.location.href = '/order-confirmed';
-        } else if (data.error) {
+         window.location.href = '/order-confirmed';
+        } else if (data.error) { //we could just say if error
             submitButton.disabled = false;
             errorMsg.style.display = 'flex';
             errorMsg.innerText = error;
